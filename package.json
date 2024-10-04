@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "terminally-online",
+  "version": "1.0.0",
+  "bin": "index.mjs",
+  "scripts": {},
+  "author": "Dan Dean",
+  "license": "All rights reserved",
+  "description": "",
+  "dependencies": {
+    "masto": "^6.8.0",
+    "rss-parser": "^3.13.0"
+  }
+}
