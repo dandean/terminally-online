@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // @ts-check
 import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import Parser from "rss-parser";
@@ -41,12 +41,17 @@ console.log(cache);
 
 await Promise.all(
   feed.items.map(async (item) => {
+    if (cache.has(item.guid)) {
+      return;
+    }
     const result = await post(item);
-    // TODO: if true, add guid to the cache
+    if (result) {
+      cache.add(item.guid);
+    }
   })
 );
 
-// TODO: write the cache back to disk
+await writeFile(doNotSyncPath, JSON.stringify(Array.from(cache), null, 2));
 
 /**
  * Posts a feed item to Mastodon
@@ -55,5 +60,5 @@ await Promise.all(
  */
 async function post(item) {
   console.log(cache.has(item.guid), item.guid);
-  return false;
+  return true;
 }
